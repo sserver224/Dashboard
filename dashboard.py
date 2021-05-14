@@ -4,15 +4,24 @@ from tk_tools import *
 from psutil import *
 from time import sleep as wait
 from tkinter import messagebox
+import sys
 from datetime import datetime
 root=Tk()
-s = Style(root)
+if len(sys.argv)==2:
+    if sys.argv[1]=='-ram_display':
+        ramDisplay=True
+        ram=RotaryScale(root, max_value=virtual_memory().total/1000000000,unit='GB RAM')
+    else:
+        ramDisplay=False
+        ram=RotaryScale(root, max_value=100.0,unit='% RAM')
+else:
+    ram=RotaryScale(root, max_value=100.0,unit='% RAM')
+    ramDisplay=False
 battery=DoubleVar()
 # add the label to the progressbar style
-root.title('Dashboard v1.1 ©sserver')
+root.title('Dashboard v1.2 ©sserver')
 root.iconbitmap('dashboard.ico')
 root.grid()
-ram=RotaryScale(root, max_value=100.0,unit='% RAM')
 disk=RotaryScale(root, max_value=100.0,unit='% Disk')
 clock_hours=SevenSegmentDigits(root, digits=2, background='black', digit_color='blue', height=100)
 clock_minutes=SevenSegmentDigits(root, digits=2, background='black', digit_color='blue', height=100)
@@ -33,7 +42,10 @@ root.config(bg='black')
 root.resizable(False, False)
 while True:
     try:
-        ram.set_value(int(virtual_memory().percent))
+        if ramDisplay:
+            ram.set_value(int(virtual_memory().used/1000000000))
+        else:
+            ram.set_value(int(virtual_memory().percent))
         try:
             battery.set(int(sensors_battery().percent))
             p_label.config(text='Battery '+str(int(battery.get()))+'%')
