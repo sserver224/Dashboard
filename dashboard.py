@@ -38,7 +38,7 @@ while True:
             battery.set(int(sensors_battery().percent)
             p_label.config(text='Battery '+str(int(battery.get()))+'%')
         except:
-            p_label.config('No batt present
+            p_label.config('No batt present')
             battery.set('0')
         disk.set_value(int(disk_usage('/').percent))
         d=datetime.now()
