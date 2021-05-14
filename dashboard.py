@@ -35,7 +35,7 @@ while True:
     try:
         ram.set_value(int(virtual_memory().percent))
         try:
-            battery.set(int(sensors_battery().percent)
+            battery.set(int(sensors_battery().percent))
             p_label.config(text='Battery '+str(int(battery.get()))+'%')
         except:
             p_label.config('No batt present')
