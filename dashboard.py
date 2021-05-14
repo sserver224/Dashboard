@@ -24,9 +24,6 @@ p_label=Label(background='black', foreground='white', text='')
 p_label.grid(column=3, row=2)
 p.grid(column=3, row=1)
 clock_hours.grid(column=4, row=1)
-lo_bat=Led(root, size=20)
-lo_bat.grid(column=4, row=2)
-Label(root, text='Lo Batt when lit').grid(column=4, row=3)
 top=Checkbutton(root, text='Keep on top')
 top.grid(column=1, row=2)
 top.state(['!alternate'])
@@ -37,12 +34,15 @@ root.resizable(False, False)
 while True:
     try:
         ram.set_value(int(virtual_memory().percent))
-        battery.set(int(sensors_battery().percent))
-        lo_bat.to_red(on=(int(sensors_battery().percent)<17))
+        try:
+            battery.set(int(sensors_battery().percent)
+            p_label.config(text='Battery '+str(int(battery.get()))+'%')
+        except:
+            p_label.config('No batt present
+            battery.set('0')
         disk.set_value(int(disk_usage('/').percent))
         d=datetime.now()
         clock_hours.set_value(str(int(d.strftime('%I'))))
-        p_label.config(text='Battery '+str(int(battery.get()))+'%')
         clock_minutes.set_value(d.strftime('%M'))
         root.attributes('-topmost', top.instate(['selected']))
         root.update()
