@@ -1,11 +1,10 @@
-from tkinter import *
-from tkinter.ttk import *
-from tk_tools import *
-from psutil import *
-from time import sleep as wait
-from tkinter import messagebox
-import sys
+from psutil import virtual_memory, sensors_battery, disk_usage
+from tkinter.ttk import Label, Progressbar, Checkbutton
+from tk_tools import RotaryScale, SevenSegmentDigits
+from tkinter import Tk, DoubleVar, messagebox
 from datetime import datetime
+from time import sleep
+import sys
 
 
 root = Tk()
@@ -78,6 +77,6 @@ while True:
 
         root.attributes('-topmost', top.instate(['selected']))
         root.update()
-        wait(0.01)
+        sleep(0.01)
     except Exception:
         break
