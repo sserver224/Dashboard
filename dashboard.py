@@ -17,16 +17,13 @@ def bytes_to_gb(bytes: int):
     return bytes / 1024 / 1024 / 1024
 
 
+ram_display = False
+ram = RotaryScale(root, max_value=100.0, unit='% RAM')
+
 if len(sys.argv) == 2:
     if sys.argv[1] == '--ram_display':
         ram_display = True
         ram = RotaryScale(root, max_value=bytes_to_gb(virtual_memory().total), unit='GB RAM')
-    else:
-        ram_display = False
-        ram = RotaryScale(root, max_value=100.0, unit='% RAM')
-else:
-    ram = RotaryScale(root, max_value=100.0, unit='% RAM')
-    ram_display = False
 
 battery = DoubleVar()
 
@@ -75,7 +72,7 @@ while True:
             battery.set('0')
         disk.set_value(int(disk_usage('/').percent))
         d = datetime.now()
-        clock_hours.set_value(str(int(d.strftime('%I'))))
+        clock_hours.set_value(d.strftime('%I').lstrip('0'))
         clock_minutes.set_value(d.strftime('%M'))
 
         root.attributes('-topmost', top.instate(['selected']))
