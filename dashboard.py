@@ -79,5 +79,5 @@ while True:
         root.attributes('-topmost', top.instate(['selected']))
         root.update()
         wait(0.01)
-    except:
+    except Exception:
         break
