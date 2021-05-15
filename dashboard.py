@@ -8,11 +8,19 @@ import sys
 
 
 root = Tk()
+root.title('Dashboard v1.2 ©sserver')
+root.iconbitmap('dashboard.ico')
+root.grid()
+
+
+def bytes_to_gb(bytes: int):
+    return bytes / 1024 / 1024 / 1024
+
 
 if len(sys.argv) == 2:
-    if sys.argv[1] == '-ram_display':
+    if sys.argv[1] == '--ram_display':
         ram_display = True
-        ram = RotaryScale(root, max_value=virtual_memory().total / 1000000000, unit='GB RAM')
+        ram = RotaryScale(root, max_value=bytes_to_gb(virtual_memory().total), unit='GB RAM')
     else:
         ram_display = False
         ram = RotaryScale(root, max_value=100.0, unit='% RAM')
@@ -21,11 +29,6 @@ else:
     ram_display = False
 
 battery = DoubleVar()
-
-# Add the label to the progressbar style
-root.title('Dashboard v1.2 ©sserver')
-root.iconbitmap('dashboard.ico')
-root.grid()
 
 disk = RotaryScale(root, max_value=100.0, unit='% Disk')
 clock_hours = SevenSegmentDigits(root, digits=2, background='black', digit_color='blue', height=100)
@@ -36,6 +39,7 @@ ram.grid(column=1, row=1)
 disk.grid(column=2, row=1)
 
 p = Progressbar(root, orient="vertical", variable=battery)
+# Add the label to the progressbar style
 p_label = Label(background='black', foreground='white', text='')
 p_label.grid(column=3, row=2)
 p.grid(column=3, row=1)
@@ -50,10 +54,11 @@ clock_colon.grid(column=5, row=1)
 root.config(bg='black')
 root.resizable(False, False)
 
+
 while True:
     try:
         if ram_display:
-            ram.set_value(int(virtual_memory().used / 1000000000))
+            ram.set_value(round(bytes_to_gb(virtual_memory().used), 1))
         else:
             ram.set_value(int(virtual_memory().percent))
         if hasattr(sensors_battery(), 'percent'):
@@ -62,11 +67,9 @@ while True:
                 if battery.get() == 100:
                     p_label.config(text=' Fully charged  ')
                 else:
-                    p_label.config(
-                        text='Charging ' + ('  ' * (3 - len(str(int(battery.get())))) + str(int(battery.get())) + '%'))
+                    p_label.config(text='Charging ' + ('  ' * (3 - len(str(int(battery.get())))) + str(int(battery.get())) + '%'))
             else:
-                p_label.config(
-                    text='  Battery ' + ('  ' * (3 - len(str(int(battery.get())))) + str(int(battery.get())) + '%  '))
+                p_label.config(text=f'  Battery ' + ('  ' * (3 - len(str(int(battery.get())))) + str(int(battery.get())) + '%  '))
         else:
             p_label.config(text='No batt present')
             battery.set('0')
