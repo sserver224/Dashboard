@@ -57,7 +57,7 @@ while True:
             ram.set_value(int(virtual_memory().used / 1000000000))
         else:
             ram.set_value(int(virtual_memory().percent))
-        try:
+        if hasattr(sensors_battery(), 'percent'):
             battery.set(int(sensors_battery().percent))
             if sensors_battery().power_plugged:
                 if battery.get() == 100:
@@ -68,7 +68,7 @@ while True:
             else:
                 p_label.config(
                     text='  Battery ' + ('  ' * (3 - len(str(int(battery.get())))) + str(int(battery.get())) + '%  '))
-        except:
+        else:
             p_label.config(text='No batt present')
             battery.set('0')
         disk.set_value(int(disk_usage('/').percent))
