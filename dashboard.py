@@ -11,14 +11,14 @@ root = Tk()
 
 if len(sys.argv) == 2:
     if sys.argv[1] == '-ram_display':
-        ramDisplay = True
+        ram_display = True
         ram = RotaryScale(root, max_value=virtual_memory().total / 1000000000, unit='GB RAM')
     else:
-        ramDisplay = False
+        ram_display = False
         ram = RotaryScale(root, max_value=100.0, unit='% RAM')
 else:
     ram = RotaryScale(root, max_value=100.0, unit='% RAM')
-    ramDisplay = False
+    ram_display = False
 
 battery = DoubleVar()
 
@@ -52,7 +52,7 @@ root.resizable(False, False)
 
 while True:
     try:
-        if ramDisplay:
+        if ram_display:
             ram.set_value(int(virtual_memory().used / 1000000000))
         else:
             ram.set_value(int(virtual_memory().percent))
